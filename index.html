@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+
+<form>
+    姓名：<input type = "text" name = "name"><br/>
+
+    年龄：<input type = "text" name = "age"><br/>
+
+    爱好：<input type = "text" name = "hobby"><br/>
+
+    <input type = "submit">
+</form>
+<script src="http://libs.baidu.com/jquery/2.0.0/jquery.js"></script>
+<script>
+    var frank = {
+        _data: {
+            age:18,
+            name: 'frank'
+        }
+    }
+    for(let key in frank._data){
+        Object.defineProperty(frank,key,{
+            get: function(){
+                console.log('读取')
+                return frank._data[key]
+            },
+            set: function(xxx){
+                console.log('设置')
+                $("input[name='"+key+"']").val(xxx)
+                return frank._data[key]
+            }
+        })
+    }
+
+    //创建一个新的API，用来监听新生成的Key,使他也具有get和set等方法
+    function createGetAndSet(key,defaultValue){
+        Object.defineProperty(frank,key,{
+            get: function(){
+                console.log('读取')
+                return frank._data[key]
+            },
+            set: function(xxx){
+                console.log('设置')
+                $("input[name='"+key+"']").val(xxx)
+                return frank._data[key]
+            }
+        })
+        frank._data[key] = defaultValue
+    }
+
+
+    $('form').on('input','input[name]',function(e){
+        let $input = $(e.currentTarget)
+        let name = $input.attr('name')
+        let value = $input.val()
+        frank[name] = value
+    })
+    //创建新的key ,并且给定初始值
+    createGetAndSet('hobby',0)
+    $('input[name = "name"]').val(frank.name)
+    $('input[name = "age"]').val(frank.age)
+    //初始化新的key 
+    $('input[name = "hobby"]').val(frank.hobby)
+</script>
+</body>
+</html>
